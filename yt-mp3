@@ -1,0 +1,54 @@
+#!/bin/bash
+#
+# YT-MP3
+# Download a list of MP3 musics from YouTube at terminal.
+#
+# Fork me on github:
+#   http://github.com/brendaw/yt-mp3
+#
+# Author:
+#   William Brendaw <williambrendaw@gmail.com>
+#   Copyleft 2015, no rights reserved, other than as required by the
+#   licenses of the incorporated software below.
+
+# Global Vars
+MUSICS_FILE=$1
+
+# API and Call Vars
+API='https://www.googleapis.com/youtube/v3/search'
+TOKEN='AIzaSyAoFblDoXcc9f96-JUgCOshYFBJAwoEU24'
+
+# Temporary Vars
+RAW=''
+MUSIC_NAME=''
+MUSIC_ID=''
+STATUS=''
+
+# Constrains
+HIGH_QUALITY=141
+NORMAL_QUALITY=140
+
+
+function get_music_id() {
+    curl -Gs $API\?part\=snippet\&q\=$1\&key\=$TOKEN | json items | json -Ma id.videoId | sed -n 1p
+}
+
+function download_video() {
+    youtube-dl --extract-audio --audio-format mp3 --format $1 https://www.youtube.com/watch\?v\=$2
+}
+
+
+while read line; do
+    RAW=$line
+    MUSIC_NAME=$(echo "$RAW" | tr \  \+)
+    MUSIC_ID=$(get_music_id $MUSIC_NAME)
+
+    download_video $HIGH_QUALITY $MUSIC_ID
+
+    STATUS=$?
+
+    if [ ! $STATUS -eq 0 ]; then
+        download_video $NORMAL_QUALITY $MUSIC_ID
+    fi
+
+done < $MUSICS_FILE
