@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # YT-MP3
-# Download a list of MP3 musics from YouTube at terminal.
+# Download a list of MP3 musics from YouTube at command-line.
 #
 # Fork me on github:
 #   http://github.com/brendaw/yt-mp3
