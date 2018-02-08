@@ -37,6 +37,39 @@ function download_video() {
     youtube-dl --extract-audio --audio-format mp3 --format $1 https://www.youtube.com/watch\?v\=$2
 }
 
+if [ -z "$1" ]
+then
+	echo Download a list of MP3 musics from YouTube at command-line
+	echo Usage: yt-mp3 [OPTION] [FILE]
+	echo FILE is required when downloading music
+	echo Otherwhise use --help OPTION to get more information
+	echo 
+	exit 1
+fi
+
+if [[ "$@" == "--help" ]]
+then
+	echo Download a list of MP3 musics from YouTube at command-line
+	echo
+	echo Usage: yt-mp3 [OPTION] [FILE]
+	echo FILE is required when downloading music
+	echo 
+	echo Dependencies:
+	echo
+	echo cURL \(http://curl.haxx.se/\)
+	echo JSON node CLI tool \(https://github.com/trentm/json\)
+	echo NodeJS \(https://nodejs.org/en/\)
+	echo youtube-dl \(https://github.com/rg3/youtube-dl\)
+	echo 
+	echo Music file format:
+	echo
+	echo [MUSIC NAME] - [SINGER/BAND]
+	echo Little Black Submarines - The Black Keys
+	echo True Doesn\'t Make A Noise - The White Stripes
+	echo Love Reconnected - Fire Department Club
+	echo 
+	exit 1
+fi
 
 while read line; do
     RAW=$line
